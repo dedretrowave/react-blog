@@ -1,4 +1,3 @@
-import {validationResult} from "express-validator";
 import UserModel from "../Model/UserModel.js";
 import {PasswordHash} from "../../Helpers/PasswordHash.js";
 import jwt from "jsonwebtoken";
@@ -76,15 +75,7 @@ export class UserPresenter {
 
   async create(req, res) {
     try {
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        return res.status(400).json(errors.array());
-      }
-
-      const passwordHash = await PasswordHash(req.body.password);
-
-      req.body.password = passwordHash;
+      req.body.password = await PasswordHash(req.body.password);
 
       const existingUser = UserModel.findOne({email: req.body.email});
 
