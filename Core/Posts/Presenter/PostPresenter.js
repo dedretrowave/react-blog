@@ -1,6 +1,7 @@
 import {validationResult} from "express-validator";
 import UserModel from "../../Users/Model/UserModel.js";
 import PostModel from "../Model/PostModel.js";
+import {addHostnameToBlogImageAndReturn, addHostnameToUserAvatarAndReturn} from "../../Helpers/addHostname.js";
 
 export class PostPresenter {
   async create(req, res) {
@@ -39,7 +40,7 @@ export class PostPresenter {
     }
   }
 
-  async get(req, res) {
+  async getOne(req, res) {
     try {
       const postId = req.params.id;
 
@@ -49,7 +50,10 @@ export class PostPresenter {
         $inc: { viewsCount: 1 },
       }, {
         returnDocument: 'after',
-      }).then(({_doc}) => {
+      })
+        .populate('author')
+        .exec()
+        .then(({_doc}) => {
         if (!_doc) {
           return res
             .status(404)
@@ -63,9 +67,9 @@ export class PostPresenter {
           .status(200)
           .json({
             success: true,
-            post: {
-              ..._doc,
-              imageUrl: `http://localhost:1488/${_doc.imageUrl}`,
+            post : {
+              ...addHostnameToBlogImageAndReturn(_doc),
+              author: addHostnameToUserAvatarAndReturn(_doc.author._doc),
             },
           })
       })
@@ -106,13 +110,39 @@ export class PostPresenter {
         .json({
           success: true,
           posts: postsAll.map(({_doc}) => ({
-            ..._doc,
-            imageUrl: `http://localhost:1488/${_doc.imageUrl}`,
+            ...addHostnameToBlogImageAndReturn(_doc),
+            author: {
+              ...addHostnameToUserAvatarAndReturn(_doc.author._doc),
+            }
           })),
         })
     } catch (err) {
       console.log(err);
       res.status(500).json({success: false, message: 'Get All posts failed'});
+    }
+  }
+
+  async getAllTags(req, res) {
+    try {
+      const posts = await PostModel.find().limit(5).exec();
+
+      const tags = posts.map(post => post.tags).flat().slice(0, 5);
+
+      res
+        .status(200)
+        .json({
+          success: true,
+          tags,
+        });
+    } catch (err) {
+      console.log(err);
+
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: 'Get All Tags failed',
+        })
     }
   }
 

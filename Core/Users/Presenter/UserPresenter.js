@@ -2,6 +2,7 @@ import UserModel from "../Model/UserModel.js";
 import {PasswordHash} from "../../Helpers/PasswordHash.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import {addHostnameToUserAvatarAndReturn} from "../../Helpers/addHostname.js";
 
 export class UserPresenter {
   async create(req, res) {
@@ -57,10 +58,7 @@ export class UserPresenter {
         .status(200)
         .json({
           success: true,
-          user: {
-            ...user._doc,
-            avatarUrl: `http://localhost:1488/${user.avatarUrl}`,
-          },
+          user: addHostnameToUserAvatarAndReturn(user._doc),
       })
     } catch (err) {
       console.log(err);
@@ -151,10 +149,7 @@ export class UserPresenter {
     const { password, ...userData } = user._doc;
 
     return {
-      user: {
-        ...userData,
-        avatarUrl: `http://localhost:1488/${userData.avatarUrl}`,
-      },
+      user: addHostnameToUserAvatarAndReturn(userData),
       token: token,
     };
   }

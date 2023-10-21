@@ -1,9 +1,9 @@
 import { UserPresenter } from "./Users/Presenter/UserPresenter.js";
 import {PostPresenter} from "./Posts/Presenter/PostPresenter.js";
 import {loginValidator, postValidator, registerValidator} from "./Validations/validations.js";
-import checkAuth from "./Utils/checkAuth.js";
+import checkAuth from "./Middleware/checkAuth.js";
 import multer from "multer";
-import {handleValidationErrors} from "./Utils/ValidationErrors.js";
+import {handleValidationErrors} from "./Middleware/ValidationErrors.js";
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -37,7 +37,8 @@ export const Router = (app) => {
 
   app.post('/posts', checkAuth, postValidator, handleValidationErrors, posts.create.bind(posts));
   app.get('/posts', posts.getAll.bind(posts));
-  app.get('/posts/:id', posts.get.bind(posts));
+  app.get('/posts/tags', posts.getAllTags.bind(posts));
+  app.get('/posts/:id', posts.getOne.bind(posts));
   app.delete('/posts/:id', checkAuth, posts.delete.bind(posts));
   app.patch('/posts/:id', checkAuth, postValidator, handleValidationErrors, posts.update.bind(posts));
 }
