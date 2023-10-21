@@ -33,10 +33,11 @@ export const Router = (app) => {
   app.post('/auth/register', registerValidator, handleValidationErrors, user.create.bind(user));
   app.post('/auth/login', loginValidator, handleValidationErrors, user.login.bind(user));
   app.get('/auth/me', checkAuth, user.getMe.bind(user));
+  app.patch('/auth/:id', checkAuth, user.update.bind(user));
 
   app.post('/posts', checkAuth, postValidator, handleValidationErrors, posts.create.bind(posts));
-  app.get('/posts', checkAuth, posts.getAllByAuthor.bind(posts));
-  app.get('/posts/:id', posts.get);
-  app.delete('/posts/:id', checkAuth, posts.delete);
-  app.patch('/posts/:id', checkAuth, postValidator, handleValidationErrors, posts.update);
+  app.get('/posts', posts.getAll.bind(posts));
+  app.get('/posts/:id', posts.get.bind(posts));
+  app.delete('/posts/:id', checkAuth, posts.delete.bind(posts));
+  app.patch('/posts/:id', checkAuth, postValidator, handleValidationErrors, posts.update.bind(posts));
 }

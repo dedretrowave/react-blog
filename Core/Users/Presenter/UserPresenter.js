@@ -4,6 +4,42 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export class UserPresenter {
+  async create(req, res) {
+    try {
+      req.body.password = await PasswordHash(req.body.password);
+
+      const existingUser = UserModel.findOne({email: req.body.email});
+
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: 'User already exists',
+        })
+      }
+
+      const model = new UserModel({
+        fullName: req.body.fullName,
+        email: req.body.email,
+        password: req.body.password,
+        avatarUrl: req.body.avatarUrl,
+      });
+
+      const user = await model.save();
+
+      res.status(200).json({
+        success: true,
+        ...this.#getUserSession(user),
+      });
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        success: false,
+        message: err,
+      })
+    }
+  }
+
   async getMe(req, res) {
     try {
       const user = await UserModel.findById(req.userId);
@@ -20,8 +56,11 @@ export class UserPresenter {
       res
         .status(200)
         .json({
-        success: true,
-        user: user,
+          success: true,
+          user: {
+            ...user._doc,
+            avatarUrl: `http://localhost:1488/${user.avatarUrl}`,
+          },
       })
     } catch (err) {
       console.log(err);
@@ -73,39 +112,30 @@ export class UserPresenter {
     }
   }
 
-  async create(req, res) {
+  async update(req, res) {
     try {
-      req.body.password = await PasswordHash(req.body.password);
+      const userId = req.params.id;
 
-      const existingUser = UserModel.findOne({email: req.body.email});
-
-      if (existingUser) {
-        return res.status(400).json({
-          success: false,
-          message: 'User already exists',
-        })
-      }
-
-      const model = new UserModel({
-        fullName: req.body.fullName,
+      await UserModel.updateOne({
+        _id: userId,
+      }, {
+        fullName: req.body.title,
         email: req.body.email,
         password: req.body.password,
         avatarUrl: req.body.avatarUrl,
       });
 
-      const user = await model.save();
-
-      res.status(200).json({
+      res.json({
         success: true,
-        ...this.#getUserSession(user),
-        });
+        message: 'User updated',
+      })
     } catch (err) {
       console.log(err);
 
       res.status(500).json({
         success: false,
-        message: err,
-      })
+        message: 'User update failed'
+      });
     }
   }
 
@@ -121,7 +151,10 @@ export class UserPresenter {
     const { password, ...userData } = user._doc;
 
     return {
-      user: userData,
+      user: {
+        ...userData,
+        avatarUrl: `http://localhost:1488/${userData.avatarUrl}`,
+      },
       token: token,
     };
   }

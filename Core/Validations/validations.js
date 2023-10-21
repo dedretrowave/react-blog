@@ -22,5 +22,5 @@ export const postValidator = [
   body('title', 'Enter article title').isLength({ min:  blogTitleLength }).isString(),
   body('text', 'Enter article text').isLength({ min: blogTextLength }).isString(),
   body('tags', 'Wrong tag format').optional().isArray(),
-  body('imageUrl', 'Wrong image URL').optional().isURL(),
+  body('imageUrl', 'Wrong image URL').optional().isString(),
 ]
