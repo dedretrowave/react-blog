@@ -1,5 +1,4 @@
 import {validationResult} from "express-validator";
-import UserModel from "../../Users/Model/UserModel.js";
 import PostModel from "../Model/PostModel.js";
 import {addHostnameToBlogImageAndReturn, addHostnameToUserAvatarAndReturn} from "../../Helpers/addHostname.js";
 

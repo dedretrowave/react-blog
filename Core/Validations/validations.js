@@ -10,7 +10,7 @@ export const registerValidator = [
   body('email', 'Enter email').isEmail(),
   body('password', 'Enter password').isLength({ min: passwordLength }).isString(),
   body('fullName', 'Enter name').isLength({ min: nameLength }).isString(),
-  body('avatarUrl').optional().isURL(),
+  body('avatarUrl').optional().isString(),
 ]
 
 export const loginValidator = [

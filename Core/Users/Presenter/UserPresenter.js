@@ -11,7 +11,7 @@ export class UserPresenter {
 
       const existingUser = UserModel.findOne({email: req.body.email});
 
-      if (existingUser) {
+      if (existingUser._doc) {
         return res.status(400).json({
           success: false,
           message: 'User already exists',

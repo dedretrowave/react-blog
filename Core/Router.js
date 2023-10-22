@@ -20,7 +20,7 @@ export const Router = (app) => {
   const user = new UserPresenter();
   const posts = new PostPresenter();
 
-  app.post('/upload', checkAuth, upload.single('image'),
+  app.post('/upload', upload.single('image'),
     (req, res) => {
       res
         .status(200)
@@ -40,5 +40,5 @@ export const Router = (app) => {
   app.get('/posts/tags', posts.getAllTags.bind(posts));
   app.get('/posts/:id', posts.getOne.bind(posts));
   app.delete('/posts/:id', checkAuth, posts.delete.bind(posts));
-  app.patch('/posts/:id', checkAuth, postValidator, handleValidationErrors, posts.update.bind(posts));
+  app.patch('/posts/:id', checkAuth, posts.update.bind(posts));
 }
