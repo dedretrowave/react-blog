@@ -16,11 +16,15 @@ export class PostPresenter {
           });
       }
 
+      const resolvedTags = req.body.tags
+        .split(/,|\\|\/|\.|\+/g)
+        .map(tag => tag.trim());
+
       const model = new PostModel({
         title: req.body.title,
         text: req.body.text,
-        tags: req.body.tags.split(/,|\\|\/|\.|\+/g),
-        imageUrl: req.body.imageUrl.split(process.env.DOMAIN)[1],
+        tags: resolvedTags,
+        imageUrl: req.body.imageUrl.split(`${process.env.DOMAIN}/`)[1],
         author: req.userId,
       });
 
