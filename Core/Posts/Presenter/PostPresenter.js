@@ -19,8 +19,8 @@ export class PostPresenter {
       const model = new PostModel({
         title: req.body.title,
         text: req.body.text,
-        tags: req.body.tags,
-        imageUrl: req.body.imageUrl,
+        tags: req.body.tags.split(/,|\\|\/|\.|\+/g),
+        imageUrl: req.body.imageUrl.split(process.env.DOMAIN)[1],
         author: req.userId,
       });
 

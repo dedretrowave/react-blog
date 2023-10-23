@@ -21,6 +21,6 @@ export const loginValidator = [
 export const postValidator = [
   body('title', `Title must be at least ${blogTitleLength} characters long`).isLength({ min:  blogTitleLength }).isString(),
   body('text', `Post must be at least ${blogTextLength} characters long`).isLength({ min: blogTextLength }).isString(),
-  body('tags', 'Wrong tag format').optional().isArray(),
+  body('tags', 'Wrong tag format').optional().isString(),
   body('imageUrl', 'Try again').optional().isString(),
 ]

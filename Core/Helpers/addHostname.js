@@ -1,6 +1,6 @@
 export const addHostnameToUserAvatarAndReturn = (user) => {
   const url = user.avatarUrl ?
-    `${process.env.HOSTNAME}:${process.env.SERVER_PORT}/${user.avatarUrl}`
+    `${process.env.DOMAIN}/${user.avatarUrl}`
     : '';
 
   return {
@@ -11,7 +11,7 @@ export const addHostnameToUserAvatarAndReturn = (user) => {
 
 export const addHostnameToBlogImageAndReturn = (post) => {
   const url = post.imageUrl ?
-    `${process.env.HOSTNAME}:${process.env.SERVER_PORT}/${post.imageUrl}`
+    `${process.env.DOMAIN}/${post.imageUrl}`
     : '';
 
   return {
