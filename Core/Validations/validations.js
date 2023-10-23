@@ -7,20 +7,20 @@ const blogTitleLength = 10;
 const blogTextLength = 20;
 
 export const registerValidator = [
-  body('email', 'Enter email').isEmail(),
-  body('password', 'Enter password').isLength({ min: passwordLength }).isString(),
-  body('fullName', 'Enter name').isLength({ min: nameLength }).isString(),
-  body('avatarUrl').optional().isString(),
+  body('email', 'Incorrect email').isEmail(),
+  body('password', `Password must be at least ${passwordLength} characters long`).isLength({ min: passwordLength }).isString(),
+  body('fullName', `Name must be ${nameLength} characters long`).isLength({ min: nameLength }).isString(),
+  body('avatarUrl', 'Try again').optional().isString(),
 ]
 
 export const loginValidator = [
-  body('email', 'Enter email').isEmail(),
-  body('password', 'Enter password').isLength({ min: passwordLength }).isString(),
+  body('email', 'Incorrect email').isEmail(),
+  body('password', `Password must be at least ${passwordLength} characters long`).isLength({ min: passwordLength }).isString(),
 ]
 
 export const postValidator = [
-  body('title', 'Enter article title').isLength({ min:  blogTitleLength }).isString(),
-  body('text', 'Enter article text').isLength({ min: blogTextLength }).isString(),
+  body('title', `Title must be at least ${blogTitleLength} characters long`).isLength({ min:  blogTitleLength }).isString(),
+  body('text', `Post must be at least ${blogTextLength} characters long`).isLength({ min: blogTextLength }).isString(),
   body('tags', 'Wrong tag format').optional().isArray(),
-  body('imageUrl', 'Wrong image URL').optional().isString(),
+  body('imageUrl', 'Try again').optional().isString(),
 ]

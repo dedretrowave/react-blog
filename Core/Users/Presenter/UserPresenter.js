@@ -78,6 +78,7 @@ export class UserPresenter {
 
       if (!user) {
         return res.status(404).json({
+          success: false,
           message: 'Incorrect email or password'
         });
       }
@@ -88,6 +89,7 @@ export class UserPresenter {
         return res
           .status(404)
           .json({
+            success: false,
             message: 'Incorrect email or password'
           });
       }
