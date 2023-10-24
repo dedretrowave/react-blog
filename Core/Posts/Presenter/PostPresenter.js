@@ -60,6 +60,12 @@ export class PostPresenter {
         returnDocument: 'after',
       })
         .populate('author')
+        .populate({
+          path: 'comments',
+          populate: {
+            path: 'author',
+          },
+        })
         .exec()
         .then(({_doc}) => {
         if (!_doc) {

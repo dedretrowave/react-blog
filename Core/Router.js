@@ -1,9 +1,10 @@
 import { UserPresenter } from "./Users/Presenter/UserPresenter.js";
 import {PostPresenter} from "./Posts/Presenter/PostPresenter.js";
-import {loginValidator, postValidator, registerValidator} from "./Validations/validations.js";
+import {commentValidator, loginValidator, postValidator, registerValidator} from "./Validations/validations.js";
 import checkAuth from "./Middleware/checkAuth.js";
 import multer from "multer";
 import {handleValidationErrors} from "./Middleware/ValidationErrors.js";
+import {CommentPresenter} from "./Posts/Comments/Presenter/CommentPresenter.js";
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -19,6 +20,7 @@ const upload = multer({storage});
 export const Router = (app) => {
   const user = new UserPresenter();
   const posts = new PostPresenter();
+  const comments = new CommentPresenter();
 
   app.post('/upload', upload.single('image'),
     (req, res) => {
@@ -41,4 +43,6 @@ export const Router = (app) => {
   app.get('/posts/:id', posts.getOne.bind(posts));
   app.delete('/posts/:id', checkAuth, posts.delete.bind(posts));
   app.patch('/posts/:id', checkAuth, posts.update.bind(posts));
+
+  app.post('/comments', checkAuth, commentValidator, handleValidationErrors, comments.create.bind(comments));
 }

@@ -24,3 +24,7 @@ export const postValidator = [
   body('tags', 'Wrong tag format').optional().isString(),
   body('imageUrl', 'Try again').optional().isString(),
 ]
+
+export const commentValidator = [
+  body('text', `Wrong comment format`).isString(),
+]

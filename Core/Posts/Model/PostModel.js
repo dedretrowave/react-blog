@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import CommentSchema from "../Comments/Model/CommentModel.js";
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -23,7 +24,12 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-  }
+  },
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment',
+  },
+  ]
 }, {
   timestamps: true,
 });
