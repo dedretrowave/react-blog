@@ -26,9 +26,9 @@ export class CommentPresenter {
       const post = await PostModel.findOneAndUpdate({
         _id: req.body.postId,
       }, {
-        comments: [
-          model._doc._id,
-        ]
+        $push: {
+          comments: model._doc._id,
+        },
       }, {
         returnDocument: 'after',
       });
