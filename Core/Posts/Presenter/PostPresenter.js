@@ -68,22 +68,27 @@ export class PostPresenter {
         })
         .exec()
         .then(({_doc}) => {
-        if (!_doc) {
-          return res
-            .status(404)
-            .json({
-              success: false,
-              message: 'Article not found',
-            })
-        }
+          if (!_doc) {
+            return res
+              .status(404)
+              .json({
+                success: false,
+                message: 'Article not found',
+              })
+          }
 
-        return res
-          .status(200)
-          .json({
-            success: true,
-            post : {
-              ...addHostnameToBlogImageAndReturn(_doc),
-              author: addHostnameToUserAvatarAndReturn(_doc.author._doc),
+          _doc.comments = _doc.comments.map(comment => ({
+            ...comment._doc,
+            author: addHostnameToUserAvatarAndReturn(comment._doc.author._doc),
+          }));
+
+          return res
+            .status(200)
+            .json({
+              success: true,
+              post : {
+                ...addHostnameToBlogImageAndReturn(_doc),
+                author: addHostnameToUserAvatarAndReturn(_doc.author._doc),
             },
           })
       })
