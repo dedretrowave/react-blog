@@ -29,7 +29,7 @@ export const Router = (app) => {
         .status(200)
         .json({
           success: true,
-          url: `${process.env.DOMAIN}/uploads/${req.file.originalname}`
+          url: `uploads/${req.file.originalname}`
         });
     });
 

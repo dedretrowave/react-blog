@@ -24,7 +24,7 @@ export class PostPresenter {
         title: req.body.title,
         text: req.body.text,
         tags: resolvedTags,
-        imageUrl: req.body.imageUrl.split(`${process.env.DOMAIN}/`)[1],
+        imageUrl: req.body.imageUrl,
         author: req.userId,
       });
 
