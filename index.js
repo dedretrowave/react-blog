@@ -9,7 +9,7 @@ import cors from "cors";
 dotenv.config();
 
 mongoose.connect(
-  'mongodb+srv://pvrvd0xmail:1488@blog.nwd6f86.mongodb.net/?retryWrites=true&w=majority'
+  process.env.MONGODB_CONNECTION
 )
   .then(() => {
     console.log('DB Connected')
