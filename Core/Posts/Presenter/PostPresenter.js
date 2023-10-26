@@ -80,7 +80,7 @@ export class PostPresenter {
             .status(200)
             .json({
               success: true,
-              post,
+              post: _doc,
           })
       })
         .catch(err => {

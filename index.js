@@ -5,12 +5,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: "dvrdk8yjg",
-  api_key: "217778679165557",
-  api_secret: "U-nh1M2K6VOUZqTYT9Me9-pZaXY",
-});
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
 
 mongoose.connect(
   process.env.MONGODB_CONNECTION
