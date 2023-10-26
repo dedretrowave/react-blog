@@ -18,25 +18,37 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-export const Router = (app) => {
+export const Router = (app, cloudinary) => {
   const user = new UserPresenter();
   const posts = new PostPresenter();
   const comments = new CommentPresenter();
 
-  app.post('/api/upload', async (req, res) => {
-    await fetch(
-      `https://www.filestackapi.com/api/store/S3?key=${process.env.CDN_KEY}`, {
-        method: "POST",
-        body: req.body.image,
-      }
-    ).then((data) => data.json())
-      .then((data) => {
-        res
+  app.post('/api/upload',
+    upload.single('image'),
+    (req, res) => {
+    cloudinary.uploader.upload(`uploads/${req.file.originalname}`,
+      {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      },
+      (error, response) => {
+        if (error) {
+          console.log(error);
+          return res
+            .status(500)
+            .json({
+              success: false,
+              message: 'Image upload failed',
+            });
+        }
+
+        return res
           .status(200)
           .json({
             success: true,
-            url: data.url,
-          });
+            url: response.secure_url,
+          })
       });
   });
 

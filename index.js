@@ -1,11 +1,15 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
-import mongoose, {mongo} from 'mongoose';
+import mongoose from 'mongoose';
 import { Router } from "./Core/Router.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import { v2 as cloudinary } from "cloudinary";
 
-
+cloudinary.config({
+  cloud_name: "dvrdk8yjg",
+  api_key: "217778679165557",
+  api_secret: "U-nh1M2K6VOUZqTYT9Me9-pZaXY",
+});
 dotenv.config();
 
 mongoose.connect(
@@ -21,9 +25,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
+app.use('./uploads', express.static('uploads'));
 
-Router(app);
+Router(app, cloudinary);
 
 app.listen(process.env.SERVER_PORT, err => {
   if (err) {
