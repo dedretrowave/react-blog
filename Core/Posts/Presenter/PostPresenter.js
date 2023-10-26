@@ -119,13 +119,8 @@ export class PostPresenter {
         .status(200)
         .json({
           success: true,
-          posts: postsAll.map(({_doc}) => ({
-            ...addHostnameToBlogImageAndReturn(_doc),
-            author: {
-              ...addHostnameToUserAvatarAndReturn(_doc.author._doc),
-            }
-          })),
-        })
+          posts: postsAll,
+        });
     } catch (err) {
       console.log(err);
       res.status(500).json({success: false, message: 'Get All posts failed'});
@@ -226,6 +221,7 @@ export class PostPresenter {
             })
         })
         .catch(err => {
+          console.log(err);
           return res
             .status(500)
             .json({
