@@ -1,6 +1,5 @@
 import {validationResult} from "express-validator";
 import PostModel from "../Model/PostModel.js";
-import {addHostnameToBlogImageAndReturn, addHostnameToUserAvatarAndReturn} from "../../Helpers/addHostname.js";
 
 export class PostPresenter {
   async create(req, res) {
@@ -77,19 +76,11 @@ export class PostPresenter {
               })
           }
 
-          _doc.comments = _doc.comments.map(comment => ({
-            ...comment._doc,
-            author: addHostnameToUserAvatarAndReturn(comment._doc.author._doc),
-          }));
-
           return res
             .status(200)
             .json({
               success: true,
-              post : {
-                ...addHostnameToBlogImageAndReturn(_doc),
-                author: addHostnameToUserAvatarAndReturn(_doc.author._doc),
-            },
+              post,
           })
       })
         .catch(err => {

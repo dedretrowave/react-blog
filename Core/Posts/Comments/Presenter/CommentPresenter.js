@@ -1,7 +1,6 @@
 import {validationResult} from "express-validator";
 import CommentModel from "../Model/CommentModel.js";
 import PostModel from "../../Model/PostModel.js";
-import {addHostnameToUserAvatarAndReturn} from "../../../Helpers/addHostname.js";
 
 export class CommentPresenter {
   async create(req, res) {
@@ -37,16 +36,11 @@ export class CommentPresenter {
       await comment
         .populate('author');
 
-      const resolvedComment = {
-        ...comment._doc,
-        author: addHostnameToUserAvatarAndReturn(comment._doc.author._doc),
-      }
-
       res
         .status(200)
         .json({
           success: true,
-          comment: resolvedComment,
+          comment: comment,
         });
     } catch (err) {
       console.log(err);

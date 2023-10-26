@@ -23,15 +23,22 @@ export const Router = (app) => {
   const posts = new PostPresenter();
   const comments = new CommentPresenter();
 
-  app.post('/api/upload', upload.single('image'),
-    (req, res) => {
-      res
-        .status(200)
-        .json({
-          success: true,
-          url: `uploads/${req.file.originalname}`
-        });
-    });
+  app.post('/api/upload', async (req, res) => {
+    await fetch(
+      `https://www.filestackapi.com/api/store/S3?key=${process.env.CDN_KEY}`, {
+        method: "POST",
+        body: req.body.image,
+      }
+    ).then((data) => data.json())
+      .then((data) => {
+        res
+          .status(200)
+          .json({
+            success: true,
+            url: data.url,
+          });
+      });
+  });
 
   app.post('/api/auth/register', registerValidator, handleValidationErrors, user.create.bind(user));
   app.post('/api/auth/login', loginValidator, handleValidationErrors, user.login.bind(user));
